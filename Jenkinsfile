@@ -6,7 +6,7 @@ pipeline {
             kind: Pod
             metadata:
             labels:
-                some-label: some-label-value
+                key: slave
             spec:
             containers:
             - name: maven
