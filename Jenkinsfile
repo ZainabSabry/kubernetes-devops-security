@@ -1,26 +1,26 @@
 pipeline {
   agent {
-      kubernetes {
-          yaml '''
-            apiVersion: v1
-            kind: Pod
-            metadata:
-            labels:
-              some-label: some-label-value
-            spec:
-            containers:
-            - name: maven
-              image: maven:3.8.6-jdk-11
-              command:
-              - /bin/cat
-              tty: true
-            - name: busybox
-            image: busybox
-            command:
-            - sleep
-            args:
-            - 99d
-          '''
+  kubernetes {
+    yaml '''
+      apiVersion: v1
+      kind: Pod
+      metadata:
+      labels:
+        some-label: some-label-value
+      spec:
+      containers:
+      - name: maven
+        image: maven:alpine
+        command:
+        - cat
+        tty: true
+      - name: busybox
+      image: busybox
+      command:
+      - sleep
+      args:
+      - 99d
+    '''
       }
   }
 
