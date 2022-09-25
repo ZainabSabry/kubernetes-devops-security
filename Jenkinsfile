@@ -1,17 +1,66 @@
 pipeline {
-  agent any
+  agent {
+      kubernetes {
+          yaml '''
+            apiVersion: v1
+            kind: Pod
+            metadata:
+            labels:
+                some-label: some-label-value
+            spec:
+            containers:
+            - name: maven
+              image: maven:alpine
+              command:
+              - cat
+              tty: true
+          '''
+      }
+  }
 
   stages {
-      stage('Build Artifact') {
+        stage('git version') {
             steps {
-              sh "mvn clean package -DskipTests=true"
-              archive 'target/*.jar' //so that they can be downloaded later
+                sh 'git version'
             }
-      stage("Unit tests") {
-        steps {
-          sh "mvn test"
         }
-      }
-        }   
-    }
+        stage('Build Artifact') {
+            steps {
+                container("maven"){
+                    sh "mvn clean package -DskipTests=true"
+                    archive 'target/*.jar' //so that they can be downloaded later
+                }
+            }
+        }
+        stage("Unit tests") {
+            steps {
+                container("maven"){
+                    sh "mvn test"
+                }
+            }
+        }
+    }   
+
 }
+
+
+
+// pipeline {
+//   agent any
+
+//   stages {
+//       stage('Build Artifact') {
+//             steps {
+//               sh "mvn clean package -DskipTests=true"
+//               archive 'target/*.jar' //so that they can be downloaded later
+//             }
+//       stage("Unit tests") {
+//         steps {
+//           sh "mvn test"
+//         }
+//       }
+//         }   
+//     }
+// }
+
+
