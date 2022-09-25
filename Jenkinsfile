@@ -45,6 +45,21 @@ pipeline {
                 }
             }
         }
+        stage('Build Artifact') {
+          steps {
+            container('maven') {
+              sh 'mvn clean package -DskipTests=true'
+              archive 'target/*.jar'
+            }
+          }
+        }
+        stage('Unit tests') {
+          steps {
+            container('maven'){
+              sh 'mvn test'
+            }
+          }
+        }
     }
 }
 
