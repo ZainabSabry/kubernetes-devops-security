@@ -26,16 +26,16 @@ pipeline {
         }
         stage('Build Artifact') {
             steps {
-                container("maven"){
-                    sh "mvn clean package -DskipTests=true"
+                container('maven'){
+                    sh 'mvn clean package -DskipTests=true'
                     archive 'target/*.jar' //so that they can be downloaded later
                 }
             }
         }
-        stage("Unit tests") {
+        stage('Unit tests') {
             steps {
-                container("maven"){
-                    sh "mvn test"
+                container('maven'){
+                    sh 'mvn test'
                 }
             }
         }
