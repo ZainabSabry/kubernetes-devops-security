@@ -6,7 +6,7 @@ pipeline {
             kind: Pod
             metadata:
             labels:
-                key: slave
+              some-label: some-label-value
             spec:
             containers:
             - name: maven
@@ -14,6 +14,12 @@ pipeline {
               command:
               - /bin/cat
               tty: true
+            - name: busybox
+            image: busybox
+            command:
+            - sleep
+            args:
+            - 99d
           '''
       }
   }
@@ -23,6 +29,13 @@ pipeline {
             steps {
                 sh 'git version'
             }
+        }
+        stage('maven version') {
+          steps {
+            container('maven'){
+              sh 'mvn --version'
+            }
+          }
         }
         stage('Build Artifact') {
             steps {
