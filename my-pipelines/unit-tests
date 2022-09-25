@@ -19,6 +19,11 @@ pipeline {
   }
 
   stages {
+        stage('git version') {
+            steps {
+                sh 'git version'
+            }
+        }
         stage('Build Artifact') {
             steps {
                 container("maven"){
